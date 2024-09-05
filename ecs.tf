@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "medusa_task" {
   container_definitions = jsonencode([
     {
       name  = "medusa-backend"
-      image = "medusajs/medusa:v1.3.1"
+      image = "linuxserver/medusa:latest"
       portMappings = [{
         containerPort = 9000
         hostPort      = 9000
@@ -36,8 +36,10 @@ resource "aws_ecs_service" "medusa_service" {
   desired_count   = 1
 
   network_configuration {
-    subnets         = [aws_subnet.public_subnet.id]
+    subnets         = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
     security_groups = [aws_security_group.ecs_sg.id]
+    assign_public_ip = true
+
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.medusa_tg.arn
@@ -51,7 +53,11 @@ resource "aws_lb" "medusa_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.ecs_sg.id]
-  subnets            = [aws_subnet.public_subnet.id]
+  subnets            = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
+
+  enable_deletion_protection = false
+  enable_cross_zone_load_balancing = true
+  idle_timeout = 60
 }
 
 resource "aws_lb_target_group" "medusa_tg" {
