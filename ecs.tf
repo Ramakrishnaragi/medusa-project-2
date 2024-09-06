@@ -65,6 +65,7 @@ resource "aws_lb_target_group" "medusa_tg" {
   port     = 9000
   protocol = "HTTP"
   vpc_id   = aws_vpc.medusa_vpc.id
+  target_type = "ip"
 }
 
 resource "aws_lb_listener" "http" {
