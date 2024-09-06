@@ -13,10 +13,10 @@ resource "aws_ecs_task_definition" "medusa_task" {
   container_definitions = jsonencode([
     {
       name  = "medusa-backend"
-      image = "linuxserver/medusa:latest"
+      image = "linuxserver/medusa:1.0.21"
       portMappings = [{
         containerPort = 9000
-        hostPort      = 9000
+        hostPort      = 0
         protocol      = "tcp"
       }]
       environment = [
@@ -38,7 +38,7 @@ resource "aws_ecs_service" "medusa_service" {
   network_configuration {
     subnets         = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
     security_groups = [aws_security_group.ecs_sg.id]
-    assign_public_ip = false
+    assign_public_ip = true
 
   }
   load_balancer {
