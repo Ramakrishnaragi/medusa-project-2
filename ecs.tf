@@ -38,7 +38,7 @@ resource "aws_ecs_service" "medusa_service" {
   network_configuration {
     subnets         = [aws_subnet.public_subnet1.id, aws_subnet.public_subnet2.id]
     security_groups = [aws_security_group.ecs_sg.id]
-    assign_public_ip = true
+    assign_public_ip = false
 
   }
   load_balancer {
