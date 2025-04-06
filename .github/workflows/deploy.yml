@@ -3,8 +3,9 @@ name: Deploy Medusa Backend
 on:
   push:
     branches:
-      - master
-
+      - main
+  workflow_dispatch:
+   
 jobs:
   deploy:
     runs-on: ubuntu-latest
